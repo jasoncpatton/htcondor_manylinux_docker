@@ -118,7 +118,7 @@ function boost {
 	    fi
 	done
 	echo "}" >> tools/build/src/user-config.jam
-	./b2 install link=static --prefix=/usr/local cxxflags=-fPIC linkflags=-fPIC --with-python python=${pythons:1} # strip the leftmost comma
+	./b2 install --prefix=/usr/local --layout=system variant=release link=static define=BOOST_HAS_THREADS cxxflags=-fPIC linkflags=-fPIC --with-python python=${pythons:1} # strip the leftmost comma
 	rm -rf /usr/local/lib/cmake
 	popd
     )
