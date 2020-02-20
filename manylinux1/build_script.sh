@@ -50,7 +50,7 @@ cd $BUILD_DIR
 # cmake
 cmake $SOURCE_DIR \
        -DCMAKE_INSTALL_PREFIX:PATH=/usr/local \
-       -DUW_BUILD:BOOL=ON \
+       -DPROPER:BOOL=ON \
        -DCLIPPED:BOOL=ON \
        -DHAVE_BOINC:BOOL=OFF \
        -DENABLE_JAVA_TESTS:BOOL=OFF \
