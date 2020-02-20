@@ -16,7 +16,8 @@ RUN yum install -y epel-release
 RUN yum install -y readline-devel libicu-devel pam-devel cyrus-sasl-devel pcre-devel uuid-devel uuid-c++-devel libxml2-devel libtool byacc perl-Archive-Tar flex nss-devel c-ares-devel e2fsprogs-devel libselinux-devel expat-devel libuuid-devel libcurl-devel python-devel krb5-devel keyutils-libs-devel openldap-devel
 
 # Install updated cmake
-RUN /opt/python/cp37-cp37m/bin/pip install cmake
+# manylinux1 is limited to version 3.13.3 or older
+RUN /opt/python/cp37-cp37m/bin/pip install cmake==3.13.3
 RUN ln -s /opt/python/cp37-cp37m/bin/cmake /usr/local/bin/cmake
 
 # There is an updated autoconf but it was built without pkg-config, so we link
