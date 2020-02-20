@@ -29,15 +29,6 @@ mkdir -p $SOURCE_DIR
 tar -xf $HTCONDOR_GIT_BRANCH.tar.gz --strip-components=1 -C $SOURCE_DIR
 rm -f $HTCONDOR_GIT_BRANCH.tar.gz
 
-# patch source with all patch files in the scratch directory
-cd $SOURCE_DIR
-for i in $_CONDOR_SCRATCH_DIR/*.patch; do
-    if [ -f $i ]; then
-	echo "Applying patch $i"
-	patch -p1 < $i || echo "Patch $i did not apply"
-    fi
-done
-
 # set up build environment
 export PATH=$PYTHON_BASE_DIR/bin:$PATH
 export PKG_CONFIG_PATH=$PYTHON_BASE_DIR/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig
