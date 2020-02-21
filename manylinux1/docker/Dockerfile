@@ -6,8 +6,7 @@
 FROM quay.io/pypa/manylinux1_x86_64:latest
 
 # Install minimal set of packages except for externals that we wish to build newer versions of
-RUN yum install -y epel-release && \
-    yum install -y readline-devel libicu-devel pam-devel cyrus-sasl-devel pcre-devel uuid-devel uuid-c++-devel libxml2-devel libtool byacc perl-Archive-Tar flex nss-devel c-ares-devel e2fsprogs-devel libselinux-devel expat-devel libuuid-devel libcurl-devel python-devel krb5-devel keyutils-libs-devel openldap-devel
+RUN yum install -y readline-devel libicu-devel pam-devel cyrus-sasl-devel pcre-devel uuid-devel uuid-c++-devel libxml2-devel libtool byacc perl-Archive-Tar flex nss-devel c-ares-devel e2fsprogs-devel libselinux-devel python-devel krb5-devel keyutils-libs-devel openldap-devel
 
 # Install cmake (latest available from PyPI)
 # In manylinux1, cmake is limited to version 3.13.3 or older
