@@ -125,4 +125,5 @@ function boost {
 }
 
 cd "$(dirname "$0")"
+echo "Writing stdout to ${PWD}/${1}.out"
 $@ > build_${1}.out
