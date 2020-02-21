@@ -36,6 +36,9 @@ RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib
 RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh munge 0.5.13
 RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh boost 1.68.0
 
+# Patch auditwheel
+RUN pushd $(dirname $(readlink -f $(which auditwheel)))/../lib/python?.?/site-packages/auditwheel && patch < /build_scripts/auditwheel.patch && popd
+
 # Cleanup
 RUN rm -rf /opt/perl-5.14.1
 RUN rm -rf /opt/pkg-config-0.22
