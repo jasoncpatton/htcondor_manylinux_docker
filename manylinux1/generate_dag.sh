@@ -12,7 +12,7 @@ dagfile=${htcondor_branch}${wheel_version_identifier}.dag
 docker_image="dockerreg.chtc.wisc.edu/htcondor/htcondor_manylinux1_x86_64:$(head -n 1 latest_tag)"
 
 echo "JOB check_branch dummy.sub NOOP" > $dagfile
-echo "SCRIPT PRE check_branch check_branch.sh $branch" >> $dagfile # check branch exists
+echo "SCRIPT PRE check_branch check_branch.sh $htcondor_branch" >> $dagfile # check branch exists
 
 # Create a temporary directory and node for each Python version in abi_tags.txt
 while read python_version_tag; do
