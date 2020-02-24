@@ -41,7 +41,7 @@ while read python_version_tag; do
     for jobtype in "build" "test"; do
 	echo "JOB $jobtype ${jobtype}_python_wheel.submit"
     	if [ "$jobtype" == "test" ]; then
-	    echo "VARS ALL_NODES manylinux_docker_image=\"$docker_images\""
+	    echo "VARS ALL_NODES manylinux_docker_image=\"$docker_image\""
 	    echo "VARS ALL_NODES htcondor_branch=\"$htcondor_branch\"" 
 	    echo "VARS ALL_NODES python_version_tag=\"$python_version_tag\""
 	    echo "VARS ALL_NODES wheel_version_identifier=\"$wheel_version_identifier\""
