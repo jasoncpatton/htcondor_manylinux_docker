@@ -16,7 +16,7 @@ echo "SCRIPT PRE check_branch check_branch.sh $branch" >> $dagfile # check branc
 
 # Create a temporary directory and node for each Python version in abi_tags.txt
 while read python_version_tag; do
-    nodename="${htcondor_branch}${wheel_version_identifier}_${abi_tag}"
+    nodename="${htcondor_branch}${wheel_version_identifier}_${python_version_tag}"
 
     # Set up the temp directories
     tmpdir="tmp/$nodename"
