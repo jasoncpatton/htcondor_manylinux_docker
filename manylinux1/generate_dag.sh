@@ -10,8 +10,8 @@ fi
 # Determine the latest docker image
 docker_image="dockerreg.chtc.wisc.edu/htcondor/htcondor_manylinux1_x86_64:$(head -n 1 latest_tag)"
 
-echo "JOB check_branch dummy.sub NOOP"
-echo "SCRIPT PRE check_branch check_branch.sh $branch" # check branch exists
+echo "JOB check_branch dummy.sub NOOP" > ${htcondor_branch}${wheel_version_identifier}
+echo "SCRIPT PRE check_branch check_branch.sh $branch" >> ${htcondor_branch}${wheel_version_identifier} # check branch exists
 
 # Create a temporary directory and node for each Python version in abi_tags.txt
 while read python_version_tag; do
@@ -49,4 +49,4 @@ while read python_version_tag; do
 	fi
     done > "$tmpdir/$tag.dag"
 
-done < abi_tags.txt
+done < abi_tags.txt >> ${htcondor_branch}${wheel_version_identifier}
