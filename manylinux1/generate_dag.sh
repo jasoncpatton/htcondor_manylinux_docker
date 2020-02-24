@@ -6,19 +6,20 @@ if [ $# -gt 0 ]; then
     htcondor_branch="$1"
     wheel_version_identifier="$2"
 fi
+dagfile=${htcondor_branch}${wheel_version_identifier}.dag
 
 # Determine the latest docker image
 docker_image="dockerreg.chtc.wisc.edu/htcondor/htcondor_manylinux1_x86_64:$(head -n 1 latest_tag)"
 
-echo "JOB check_branch dummy.sub NOOP" > ${htcondor_branch}${wheel_version_identifier}
-echo "SCRIPT PRE check_branch check_branch.sh $branch" >> ${htcondor_branch}${wheel_version_identifier} # check branch exists
+echo "JOB check_branch dummy.sub NOOP" > $dagfile
+echo "SCRIPT PRE check_branch check_branch.sh $branch" >> $dagfile # check branch exists
 
 # Create a temporary directory and node for each Python version in abi_tags.txt
 while read python_version_tag; do
     nodename="${htcondor_branch}${wheel_version_identifier}_${abi_tag}"
 
     # Set up the temp directories
-    tmpdir="tmp/$tag"
+    tmpdir="tmp/$nodename"
 
     if [ -d "$tmpdir" ]; then
 	# Start fresh if the directory exists
@@ -47,6 +48,6 @@ while read python_version_tag; do
 	    echo "PARENT build CHILD test"
 	    echo "SCRIPT POST test copy_python_wheel.sh"
 	fi
-    done > "$tmpdir/$tag.dag"
+    done > "$tmpdir/$nodename.dag"
 
-done < abi_tags.txt >> ${htcondor_branch}${wheel_version_identifier}
+done < abi_tags.txt >> $dagfile
