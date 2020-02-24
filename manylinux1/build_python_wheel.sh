@@ -7,27 +7,27 @@ unset HTTPS_PROXY
 unset FTP_PROXY
 
 # arguments
-HTCONDOR_GIT_BRANCH=$1
-ABI_TAG=$2
-VER_APPEND=$3
+HTCONDOR_BRANCH=$1
+FULL_PYTHON_VERSION_TAG=$2
+WHEEL_VERSION_IDENTIFIER=$3
 
 # directories
 SOURCE_DIR=$_CONDOR_SCRATCH_DIR/htcondor_source
 BUILD_DIR=$_CONDOR_SCRATCH_DIR/htcondor_pypi_build
 
-# derive tags & paths from ABI tag
-PYTHON_TAG=${ABI_TAG:0:4}
-PYTHON_VERSION_MAJOR=${ABI_TAG:2:1}
-PYTHON_VERSION_MINOR=${ABI_TAG:3:1}
-PYTHON_BASE_DIR=/opt/python/$PYTHON_TAG-$ABI_TAG
+# derive tags & paths from python version tag
+PYTHON_TAG=${FULL_PYTHON_VERSION_TAG:0:4}
+PYTHON_VERSION_MAJOR=${FULL_PYTHON_VERSION_TAG:2:1}
+PYTHON_VERSION_MINOR=${FULL_PYTHON_VERSION_TAG:3:1}
+PYTHON_BASE_DIR=/opt/python/$PYTHON_TAG-$FULL_PYTHON_VERSION_TAG
 
 # get the htcondor source tarball from github
-curl -k -L https://api.github.com/repos/htcondor/htcondor/tarball/$HTCONDOR_GIT_BRANCH > $HTCONDOR_GIT_BRANCH.tar.gz
+curl -k -L https://api.github.com/repos/htcondor/htcondor/tarball/$HTCONDOR_BRANCH > $HTCONDOR_BRANCH.tar.gz
 
 # untar to source directory
 mkdir -p $SOURCE_DIR
-tar -xf $HTCONDOR_GIT_BRANCH.tar.gz --strip-components=1 -C $SOURCE_DIR
-rm -f $HTCONDOR_GIT_BRANCH.tar.gz
+tar -xf $HTCONDOR_BRANCH.tar.gz --strip-components=1 -C $SOURCE_DIR
+rm -f $HTCONDOR_BRANCH.tar.gz
 
 # set up build environment
 export PATH=$PYTHON_BASE_DIR/bin:$PATH
@@ -49,7 +49,7 @@ cmake $SOURCE_DIR \
        -DWITH_BOINC:BOOL=OFF \
        -DWITH_SCITOKENS:BOOL=OFF \
        -DWANT_PYTHON_WHEELS:BOOL=ON \
-       -DAPPEND_VERSION:STRING=$VER_APPEND \
+       -DAPPEND_VERSION:STRING=$WHEEL_VERSION_IDENTIFIER \
        -DPYTHON_INCLUDE_DIR:PATH=$PYTHON_INCLUDE_DIR \
        -DBUILDID:STRING=UW_Python_Wheel_Build
 
@@ -61,7 +61,7 @@ if [ -d "bindings/python" ]; then
 else
     make
     cd build/packaging/pypi
-    sed -i 's/ver_append = ""/ver_append = "'$VER_APPEND'"/' setup.py
+    sed -i 's/ver_append = ""/ver_append = "'$WHEEL_VERSION_IDENTIFIER'"/' setup.py
 fi
 
 # put external libraries into path
