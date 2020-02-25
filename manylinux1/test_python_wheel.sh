@@ -20,7 +20,8 @@ export HOME=$_CONDOR_SCRATCH_DIR
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
 source $HOME/miniconda3/bin/activate
 conda create -y -n wheeltest python=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}
-source $HOME/miniconda3/bin/activate wheeltest
+shift 2
+$HOME/miniconda3/bin/activate wheeltest
 
 # install htcondor and run test script
 pip install $WHEEL_FILE
