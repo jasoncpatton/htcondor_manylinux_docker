@@ -6,7 +6,7 @@ FULL_PYTHON_VERSION_TAG=$1
 WHEEL_FILE=$2
 
 # do not test Python 2 "cp__m" versions
-if [ "$FULL_PYTHON_VERSION_TAG" == "cp27m" ];
+if [ "$FULL_PYTHON_VERSION_TAG" == "cp27m" ]; then
    echo "Not testing wheel for $FULL_PYTHON_VERSION_TAG"
    exit 0
 fi
