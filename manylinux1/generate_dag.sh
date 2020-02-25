@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Point to the latest docker image
+docker_image="dockerreg.chtc.wisc.edu/htcondor/htcondor_manylinux1_x86_64:$(head -n 1 latest_tag)"
+
 htcondor_branch="master" # default to master branch
 wheel_version_identifier="" # no version identifier by default
 if [ $# -gt 0 ]; then
@@ -7,9 +10,6 @@ if [ $# -gt 0 ]; then
     wheel_version_identifier="$2"
 fi
 dagfile=${htcondor_branch}${wheel_version_identifier}.dag
-
-# Determine the latest docker image
-docker_image="dockerreg.chtc.wisc.edu/htcondor/htcondor_manylinux1_x86_64:$(head -n 1 latest_tag)"
 
 echo "JOB check_branch dummy.sub NOOP" > $dagfile
 echo "SCRIPT PRE check_branch check_branch.sh $htcondor_branch" >> $dagfile # check branch exists
