@@ -4,9 +4,16 @@ set -e
 # arguments
 FULL_PYTHON_VERSION_TAG=$1
 WHEEL_FILE=$2
+shift 2 # strip args for activate scripts
 
-# do not test Python 2 "cp__m" versions
+# do not test Python 2.7 "m" version (missing from conda)
 if [ "$FULL_PYTHON_VERSION_TAG" == "cp27m" ]; then
+   echo "Not testing wheel for $FULL_PYTHON_VERSION_TAG"
+   exit 0
+fi
+
+# do not test Python 3.4 version (missing from conda)
+if [ "$FULL_PYTHON_VERSION_TAG" == "cp34m" ]; then
    echo "Not testing wheel for $FULL_PYTHON_VERSION_TAG"
    exit 0
 fi
@@ -20,8 +27,7 @@ export HOME=$_CONDOR_SCRATCH_DIR
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
 source $HOME/miniconda3/bin/activate
 conda create -y -n wheeltest python=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}
-shift 2
-$HOME/miniconda3/bin/activate wheeltest
+conda activate wheeltest
 
 # install htcondor and run test script
 pip install $WHEEL_FILE
