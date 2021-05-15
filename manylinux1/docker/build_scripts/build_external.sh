@@ -93,7 +93,7 @@ function munge {
 
 function boost {
     local basename=boost_${1//\./_}
-    local src_url=https://dl.bintray.com/boostorg/release/${1}/source/${basename}.tar.gz
+    local src_url=http://parrot.cs.wisc.edu/externals/${basename}.tar.gz
 
     $CURL -o ${basename}.tar.gz ${src_url}
 
