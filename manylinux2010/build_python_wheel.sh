@@ -6,6 +6,9 @@ unset http_proxy
 unset HTTPS_PROXY
 unset FTP_PROXY
 
+# get procs
+NPROC=$((8 > $(nproc) ? $(nproc) : 8))
+
 # arguments
 HTCONDOR_BRANCH=$1
 FULL_PYTHON_VERSION_TAG=$2
@@ -33,6 +36,7 @@ rm -f $HTCONDOR_BRANCH.tar.gz
 export PATH=$PYTHON_BASE_DIR/bin:$PATH
 export PKG_CONFIG_PATH=$PYTHON_BASE_DIR/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig
 export PYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
+export PYTHON_LIBRARY=$(python -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
 
 # create build directory
 mkdir -p $BUILD_DIR
@@ -51,15 +55,16 @@ cmake $SOURCE_DIR \
        -DWANT_PYTHON_WHEELS:BOOL=ON \
        -DAPPEND_VERSION:STRING=$WHEEL_VERSION_IDENTIFIER \
        -DPYTHON_INCLUDE_DIR:PATH=$PYTHON_INCLUDE_DIR \
+       -DPYTHON_LIBRARY:PATH=$PYTHON_LIBRARY \
        -DBUILDID:STRING=UW_Python_Wheel_Build
 
 # build targets
 if [ -d "bindings/python" ]; then
-    make python_bindings wheel_classad_module wheel_htcondor
+    make -j$NPROC python_bindings wheel_classad_module wheel_htcondor
     cd bindings/python
     curl -LO https://raw.githubusercontent.com/htcondor/htcondor/V8_8-branch/build/packaging/pypi/setup.cfg
 else
-    make
+    make -j$NPROC
     cd build/packaging/pypi
     sed -i 's/ver_append = ""/ver_append = "'$WHEEL_VERSION_IDENTIFIER'"/' setup.py
 fi

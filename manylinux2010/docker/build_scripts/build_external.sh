@@ -8,7 +8,7 @@ CURL="curl -fsSL" # silent and follow redirects
 
 function pcre {
     local basename=pcre-${1}
-    local src_url=https://ftp.pcre.org/pub/pcre/${basename}.tar.gz
+    local src_url=https://sourceforge.net/projects/pcre/files/pcre/${1}/${basename}.tar.gz
 
     $CURL -o ${basename}.tar.gz ${src_url}
 

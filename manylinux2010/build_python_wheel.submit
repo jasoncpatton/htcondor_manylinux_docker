@@ -8,6 +8,7 @@ log = build.log
 output = build.out
 error = build.err
 
+request_cpus = 2
 request_memory = 1.625GB
 request_disk = 5.5GB
 
