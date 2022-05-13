@@ -11,13 +11,9 @@ RUN yum install -y readline-devel libicu-devel pam-devel cyrus-sasl-devel uuid-d
 
 # Build external packages
 COPY build_scripts /build_scripts
-# In manylinux1, updated Perl and pkg-config are needed to build openssl and gct
-#RUN build_scripts/build_opt.sh perl 5.14.1
-#RUN build_scripts/build_opt.sh pkgconfig 0.22
 RUN build_scripts/build_external.sh pcre 8.43
 RUN build_scripts/build_external.sh openssl 1.1.1l
 RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh voms 2.1.0-rc0
-RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh gct 6.2.1629922860
 RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh munge 0.5.14
 RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh boost 1.68.0
 

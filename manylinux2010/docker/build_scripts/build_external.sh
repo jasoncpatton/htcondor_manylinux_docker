@@ -58,26 +58,6 @@ function voms {
     )
 }
 
-function gct {
-    local basename=gct-${1}
-    local src_url=https://repo.gridcf.org/gct6/sources/${basename}.tar.gz
-
-    $CURL -o ${basename}.tar.gz ${src_url}
-
-    tar -xf ${basename}.tar.gz && (
-	pushd ${basename}
-
-	# remove register keyword
-	sed -i 's/register //g' common/source/library/globus_libc.h
-	sed -i 's/register //g' gsi_openssh/source/openbsd-compat/openbsd-compat.h
-
-	./configure --prefix=/usr/local
-	make -j$NPROC
-	LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:$LD_LIBRARY_PATH make install
-	popd
-    )
-}
-
 function munge {
     local basename=munge-${1}
     local src_url=https://github.com/dun/munge/archive/${basename}.tar.gz
