@@ -1,0 +1,26 @@
+diff -ru a/boost_1_68_0/libs/python/src/exec.cpp b/boost_1_68_0/libs/python/src/exec.cpp
+--- a/boost_1_68_0/libs/python/src/exec.cpp	2021-11-12 21:00:09.432346296 +0000
++++ b/boost_1_68_0/libs/python/src/exec.cpp	2021-11-12 20:59:00.668853678 +0000
+@@ -104,12 +104,18 @@
+   if (local.is_none()) local = global;
+   // should be 'char const *' but older python versions don't use 'const' yet.
+   char *f = const_cast<char *>(filename);
+-  // Let python open the file to avoid potential binary incompatibilities.
+-#if PY_VERSION_HEX >= 0x03040000
+-  FILE *fs = _Py_fopen(f, "r");
++#if PY_VERSION_HEX >= 0x03010000
++  // Let python manage any UTF bits to avoid potential incompatibilities.
++  PyObject *fo = Py_BuildValue("s", f);
++  PyObject *fb = Py_None;
++  PyUnicode_FSConverter(fo, &fb);
++  f = PyBytes_AsString(fb);
++  FILE *fs = fopen(f, "r");
++  Py_DECREF(fo);
++  Py_DECREF(fb);
+ #elif PY_VERSION_HEX >= 0x03000000
+   PyObject *fo = Py_BuildValue("s", f);
+-  FILE *fs = _Py_fopen(fo, "r");
++  FILE *fs = fopen(fo, "r");
+   Py_DECREF(fo);
+ #else
+   PyObject *pyfile = PyFile_FromString(f, const_cast<char*>("r"));
