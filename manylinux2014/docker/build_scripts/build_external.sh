@@ -6,59 +6,6 @@ NPROC=$((8 > $(nproc) ? $(nproc) : 8))
 # curl command
 CURL="curl -fsSL" # silent and follow redirects
 
-function openssl {
-    local basename=openssl-${1}
-    local src_url=https://www.openssl.org/source/${basename}.tar.gz
-
-    $CURL -o ${basename}.tar.gz ${src_url}
-
-    tar -xf ${basename}.tar.gz && (
-        pushd ${basename}
-        ./config no-asm no-ssl2 -fPIC
-        make -j$NPROC
-        make install_sw
-        popd
-    )
-}
-
-function voms {
-    local basename=voms-${1}
-    local src_url=https://github.com/italiangrid/voms/archive/v${1}.tar.gz
-
-    $CURL -o ${basename}.tar.gz ${src_url}
-
-    tar -xf ${basename}.tar.gz && \
-	git apply voms-openssl.patch && (
-        pushd ${basename}
-
-        # remove gsoap
-        sed -i 's/PKG_CHECK_MODULES/#PKG_CHECK_MODULES/' configure.ac
-        sed -i 's/AC_WSDL2H/#AC_WSDL2H/' configure.ac
-
-        ./autogen.sh
-        ./configure --with-api-only --disable-docs --prefix=/usr/local
-        make -j$NPROC
-        make install
-        popd
-    )
-}
-
-function munge {
-    local basename=munge-${1}
-    local src_url=https://github.com/dun/munge/archive/${basename}.tar.gz
-
-    $CURL -o ${basename}.tar.gz ${src_url}
-
-    tar -xf ${basename}.tar.gz && (
-	pushd munge-${basename}
-        ./bootstrap
-	./configure --prefix=/usr/local
-	make -j$NPROC
-	make install
-	popd
-    )
-}
-
 function boost {
     local basename=boost_${1//\./_}
     local src_url=http://parrot.cs.wisc.edu/externals/${basename}.tar.gz
