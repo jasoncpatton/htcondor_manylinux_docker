@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Point to the latest docker image
-docker_image="dockerreg.chtc.wisc.edu/htcondor/htcondor_manylinux2014_x86_64:$(head -n 1 latest_tag)"
+docker_image="htcondor/htcondor_manylinux2014_x86_64:$(head -n 1 latest_tag)"
 
 htcondor_branch="master" # default to master branch
 wheel_version_identifier="" # no version identifier by default
