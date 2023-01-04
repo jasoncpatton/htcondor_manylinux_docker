@@ -1,7 +1,7 @@
 ########################
 # Docker file to setup a manylinux2014 wheel build environment for HTCondor
 # manylinux2014 (CentOS 7)
-# Jason Patton Nov 2021
+# Tim Theisen July 2022
 
 FROM quay.io/pypa/manylinux2014_x86_64
 
@@ -11,10 +11,10 @@ RUN yum install -y readline-devel libicu-devel pam-devel cyrus-sasl-devel uuid-d
 
 # Build external packages
 COPY build_scripts /build_scripts
-RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh boost 1.68.0
+RUN PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig build_scripts/build_external.sh boost 1.81.0
 
 # Patch auditwheel
-RUN pushd $(dirname $(readlink -f $(which auditwheel)))/../lib/python?.?/site-packages/auditwheel && patch < /build_scripts/auditwheel.patch && popd
+RUN pushd $(dirname $(readlink -f $(which auditwheel)))/../lib/python[1-9].[1-9]*/site-packages/auditwheel && patch < /build_scripts/auditwheel.patch && popd
 
 # Cleanup
 RUN rm -rf build_scripts

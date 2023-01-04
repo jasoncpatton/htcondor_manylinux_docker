@@ -12,8 +12,7 @@ function boost {
 
     $CURL -o ${basename}.tar.gz ${src_url}
 
-    tar -xf ${basename}.tar.gz && \
-        git apply boost-fopen.patch && (
+    tar -xf ${basename}.tar.gz && (
 	pushd ${basename}
 	./bootstrap.sh
 

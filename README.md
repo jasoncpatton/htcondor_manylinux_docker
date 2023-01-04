@@ -7,7 +7,7 @@
 2. Once in the directory for the chosen manylinux version, if not yet built, build the Docker image:
    1. Update `latest_tag` to a unique version number (I usually use the latest version of HTCondor that I'm building for).
    2. Check that `build_docker_image.sh` is pointing to an appropriate Docker repository, and run it.
-3. Once the Docker image is built, inspect the versions of Python available in the image under `/opt/python/` and update `abi_tags.txt`.
+3. Once the Docker image is built, inspect the versions of Python available in the image under `/opt/python/cp*` and update `abi_tags.txt`.
 4. Make sure that the variable `docker_image` in `generate_dag.sh` is pointing to the correct image, then run:
    
 		./generate_dag.sh <HTCondor branch name> <version identifier>
