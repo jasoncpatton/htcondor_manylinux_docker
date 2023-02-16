@@ -13,30 +13,26 @@ function boost {
     $CURL -o ${basename}.tar.gz ${src_url}
 
     tar -xf ${basename}.tar.gz && (
-	pushd ${basename}
-	./bootstrap.sh
+        pushd ${basename}
+        ./bootstrap.sh
 
-	# build non-python boost libraries
-	./b2 install --prefix=/usr/local -j$NPROC --with-thread --with-test --with-filesystem --with-regex --with-program_options --with-date_time
+        # build non-python boost libraries
+        ./b2 install --prefix=/usr/local -j$NPROC --with-thread --with-test --with-filesystem --with-regex --with-program_options --with-date_time
 
-	# build boost for every version of python by adding to user-config.jam
-	local pythons=""
-	echo "{" > tools/build/src/user-config.jam
-	for i in /opt/python/cp*; do
-        # skip python 3.11 (boost needs an update)
-	    if [[ ! "$i" =~ cp311$ ]]; then
+        # build boost for every version of python by adding to user-config.jam
+        local pythons=""
+        echo "{" > tools/build/src/user-config.jam
+        for i in /opt/python/cp*; do
             local full_ver=$(basename $i | grep -oP '(?<=^cp)[0-9]+')
             local majv=${full_ver:0:1}
             local minv=${full_ver:1}
             local incv=$(ls -1d ${i}/include/python* | head -1) # include dir
             echo "using python : ${majv}.${minv} : \"${i}/bin/python\" : \"${incv}\" : \"${i}/lib\" ;" >> tools/build/src/user-config.jam
             pythons="${pythons},${majv}.${minv}"
-	    fi
-	done
-	echo "}" >> tools/build/src/user-config.jam
-	./b2 install --prefix=/usr/local --layout=system -j$NPROC variant=release link=static define=BOOST_HAS_THREADS cxxflags=-fPIC linkflags=-fPIC --with-python python=${pythons:1} # strip the leftmost comma
-	#rm -rf /usr/local/lib/cmake
-	popd
+        done
+        echo "}" >> tools/build/src/user-config.jam
+        ./b2 install --prefix=/usr/local --layout=system -j$NPROC variant=release define=BOOST_HAS_THREADS cxxflags=-fPIC linkflags=-fPIC --with-python python=${pythons:1} # strip the leftmost comma
+        popd
     )
 }
 
