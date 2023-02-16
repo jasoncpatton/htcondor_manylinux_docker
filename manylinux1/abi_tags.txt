@@ -1,7 +1,0 @@
-cp27m
-cp27mu
-cp35m
-cp36m
-cp37m
-cp38
-cp39
