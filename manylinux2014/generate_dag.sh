@@ -35,7 +35,6 @@ while read python_version_tag; do
     echo
     echo "SUBDAG EXTERNAL $nodename $nodename.dag DIR $tmpdir"
     echo "PARENT check_branch CHILD $nodename"
-    echo "RETRY $nodename 3"
     
     # build the subdags
     for jobtype in "build" "test"; do
